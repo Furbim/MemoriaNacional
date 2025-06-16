@@ -1,207 +1,277 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ artista.nome_principal }}</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        background-color: #f4f4f4;
-        color: #333;
-      }
-      .container {
-        max-width: 900px;
-        margin: 20px auto;
-        background: #fff;
-        padding: 30px;
-        border-radius: 8px;
-      }
-      h1,
-      h2 {
-        border-bottom: 2px solid #eee;
-        padding-bottom: 5px;
-      }
-      .filmografia-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-      }
-      .filme-item {
-        text-align: center;
-      }
-      .filme-item img {
-        max-width: 100%;
-        border-radius: 4px;
-      }
-      .filme-item p {
-        font-size: 0.9em;
-        font-weight: bold;
-        margin-top: 5px;
-      }
-      
-      /* ################################################## */
-      /* ##        ESTILOS PARA A JANELA MODAL         ## */
-      /* ################################################## */
-      .modal {
-        display: none; /* Escondido por padrão */
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.6); /* Fundo preto semi-transparente */
-      }
-      .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto; /* 15% do topo e centralizado */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-        border-radius: 8px;
-        position: relative;
-      }
-      .close-button {
-        color: #aaa;
-        position: absolute;
-        top: 10px;
-        right: 20px;
-        font-size: 28px;
-        font-weight: bold;
-      }
-      .close-button:hover,
-      .close-button:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-      .episode-count-link {
-        color: #337ab7;
-        cursor: pointer;
-        text-decoration: underline;
-      }
-      /* ################################################## */
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header" style="display: flex; gap: 30px; align-items: flex-start;">
-        <div class="artist-photo">
-          {% if artista.foto %}
-            <img src="{{ artista.foto.url }}" alt="Foto de {{ artista.nome_principal }}" style="max-width: 200px; height: auto; border-radius: 5px;" />
-          {% else %}
-            <div style="width: 200px; height: 300px; background-color: #eee; display: flex; align-items: center; justify-content: center; border-radius: 5px; text-align: center;">Sem Foto</div>
-          {% endif %}
-        </div>
-        <div class="info" style="flex: 1;">
-          <h1>{{ artista.nome_principal }}</h1>
-          <div class="bio">
-            <p>
-              <strong>Outros Nomes:</strong> {{ artista.outros_nomes|default:'N/A' }}
-            </p>
-            <p>
-              <strong>Nascimento:</strong> {{ artista.data_nascimento|date:'d/m/Y'|default:'N/A' }}
-            </p>
-            <p>
-              <strong>Naturalidade:</strong> {{ artista.naturalidade|default:'N/A' }}
-            </p>
-            {% if artista.data_obito %}
-              <p>
-                <strong>Falecimento:</strong> {{ artista.data_obito|date:'d/m/Y' }}
-              </p>
-            {% endif %}
-          </div>
-        </div>
-      </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="bg-dark-800/50 backdrop-blur-sm rounded-2xl border border-dark-600 overflow-hidden mb-8">
+            <div class="flex flex-col lg:flex-row">
+                <!-- Photo -->
+                <div class="lg:w-1/3 p-6">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden shadow-2xl">
+                        {% if artista.foto %}
+                            <img src="{{ artista.foto.url }}" 
+                                 alt="Foto de {{ artista.nome_principal }}"
+                                 class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
+                                <i class="fas fa-user text-6xl text-dark-500"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
 
-      {% if artista.biografia %}
-        <div class="biografia">
-          <p style="text-align: justify; white-space: pre-wrap;">{{ artista.biografia }}</p>
+                <!-- Info -->
+                <div class="lg:w-2/3 p-6">
+                    <div class="space-y-4">
+                        <h1 class="text-4xl font-bold text-white mb-4">{{ artista.nome_principal }}</h1>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-3">
+                                <div class="flex items-center space-x-3 bg-dark-700/50 rounded-lg p-3">
+                                    <i class="fas fa-id-card text-blue-400"></i>
+                                    <div>
+                                        <span class="text-dark-300 text-sm">Outros Nomes</span>
+                                        <p class="text-white font-medium">{{ artista.outros_nomes|default:'N/A' }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center space-x-3 bg-dark-700/50 rounded-lg p-3">
+                                    <i class="fas fa-birthday-cake text-green-400"></i>
+                                    <div>
+                                        <span class="text-dark-300 text-sm">Nascimento</span>
+                                        <p class="text-white font-medium">{{ artista.data_nascimento|date:'d/m/Y'|default:'N/A' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="flex items-center space-x-3 bg-dark-700/50 rounded-lg p-3">
+                                    <i class="fas fa-map-marker-alt text-purple-400"></i>
+                                    <div>
+                                        <span class="text-dark-300 text-sm">Naturalidade</span>
+                                        <p class="text-white font-medium">{{ artista.naturalidade|default:'N/A' }}</p>
+                                    </div>
+                                </div>
+
+                                {% if artista.data_obito %}
+                                <div class="flex items-center space-x-3 bg-dark-700/50 rounded-lg p-3">
+                                    <i class="fas fa-cross text-red-400"></i>
+                                    <div>
+                                        <span class="text-dark-300 text-sm">Falecimento</span>
+                                        <p class="text-white font-medium">{{ artista.data_obito|date:'d/m/Y' }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      {% endif %}
-      <h2>Filmografia</h2>
-      <div class="filmografia-grid">
-        {% for item in filmografia %}
-          <div class="filme-item">
-            {% if item.tipo == 'filme' %}
-              <a href="{% url 'core:filme_detalhe' item.objeto.id %}">
-                {% if item.objeto.poster %}
-                  <img src="{{ item.objeto.poster.url }}" />
-                {% endif %}
-                <p>{{ item.objeto.titulo_original }}</p>
-              </a>
-            {% elif item.tipo == 'serie' %}
-              <a href="{% url 'core:serie_detalhe' item.objeto.id %}">
-                {% if item.objeto.poster %}
-                  <img src="{{ item.objeto.poster.url }}" />
-                {% endif %}
-                <p>{{ item.objeto.titulo_original }}</p>
-              </a>
-              <small><span class="episode-count-link" data-modal-target="#modal-{{ artista.id }}-{{ item.objeto.id }}">({{ item.contagem_episodios }} episódio{{ item.contagem_episodios|pluralize:'s' }})</span></small>
-            {% endif %}
-          </div>
-        {% endfor %}
-      </div>
+
+        <!-- Biography -->
+        {% if artista.biografia %}
+        <div class="bg-dark-800/50 backdrop-blur-sm rounded-2xl border border-dark-600 p-6 mb-8">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-1 h-6 bg-gradient-to-b from-primary-400 to-primary-600 rounded-full"></div>
+                <h2 class="text-2xl font-bold text-white">Biografia</h2>
+            </div>
+            <p class="text-dark-200 leading-relaxed text-justify whitespace-pre-wrap">{{ artista.biografia }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Filmography -->
+        <div class="bg-dark-800/50 backdrop-blur-sm rounded-2xl border border-dark-600 p-6">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-1 h-6 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-full"></div>
+                <h2 class="text-2xl font-bold text-white">Filmografia</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {% for item in filmografia %}
+                <div class="group">
+                    {% if item.tipo == 'filme' %}
+                    <a href="{% url 'core:filme_detalhe' item.objeto.id %}">
+                        <div class="bg-dark-700/30 rounded-xl overflow-hidden border border-dark-600 hover:border-primary-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/20">
+                            <div class="aspect-[2/3] relative overflow-hidden">
+                                {% if item.objeto.poster %}
+                                    <img src="{{ item.objeto.poster.url }}" 
+                                         alt="Pôster de {{ item.objeto.titulo_original }}"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                {% else %}
+                                    <div class="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
+                                        <i class="fas fa-film text-3xl text-dark-500"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="absolute top-2 left-2">
+                                    <span class="px-2 py-1 bg-blue-600 rounded text-xs font-medium">FILME</span>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h3 class="font-semibold text-white text-sm line-clamp-2 group-hover:text-primary-400 transition-colors">
+                                    {{ item.objeto.titulo_original }}
+                                </h3>
+                            </div>
+                        </div>
+                    </a>
+                    {% elif item.tipo == 'serie' %}
+                    <a href="{% url 'core:serie_detalhe' item.objeto.id %}">
+                        <div class="bg-dark-700/30 rounded-xl overflow-hidden border border-dark-600 hover:border-purple-500 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+                            <div class="aspect-[2/3] relative overflow-hidden">
+                                {% if item.objeto.poster %}
+                                    <img src="{{ item.objeto.poster.url }}" 
+                                         alt="Pôster de {{ item.objeto.titulo_original }}"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                {% else %}
+                                    <div class="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
+                                        <i class="fas fa-tv text-3xl text-dark-500"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="absolute top-2 left-2">
+                                    <span class="px-2 py-1 bg-purple-600 rounded text-xs font-medium">SÉRIE</span>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h3 class="font-semibold text-white text-sm line-clamp-2 group-hover:text-purple-400 transition-colors">
+                                    {{ item.objeto.titulo_original }}
+                                </h3>
+                                <div class="mt-2">
+                                    <span class="episode-count-link text-xs text-purple-400 hover:text-purple-300 cursor-pointer transition-colors" 
+                                          data-modal-target="#modal-{{ artista.id }}-{{ item.objeto.id }}">
+                                        <i class="fas fa-list mr-1"></i>
+                                        {{ item.contagem_episodios }} episódio{{ item.contagem_episodios|pluralize:'s' }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
+    <!-- Modals for Series Episodes -->
     {% for item in filmografia %}
-      {% if item.tipo == 'serie' %}
+        {% if item.tipo == 'serie' %}
         <div id="modal-{{ artista.id }}-{{ item.objeto.id }}" class="modal">
-          <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h4>Episódios de "{{ item.objeto.titulo_original }}" com {{ artista.nome_principal }}:</h4>
-            <ul>
-              {% for participacao in item.participacoes %}
-                <li>Episódio {{ participacao.episodio.numero }}: {{ participacao.episodio.titulo }}</li>
-              {% endfor %}
-            </ul>
-          </div>
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-tv text-white text-sm"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white">Episódios de "{{ item.objeto.titulo_original }}"</h4>
+                </div>
+                <p class="text-dark-300 mb-4">Participações de {{ artista.nome_principal }}:</p>
+                <div class="space-y-2 max-h-64 overflow-y-auto">
+                    {% for participacao in item.participacoes %}
+                    <div class="bg-dark-700/50 rounded-lg p-3 border border-dark-600">
+                        <div class="flex items-center justify-between">
+                            <span class="text-white font-medium">
+                                Episódio {{ participacao.episodio.numero }}: {{ participacao.episodio.titulo }}
+                            </span>
+                            <i class="fas fa-chevron-right text-dark-500"></i>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-      {% endif %}
+        {% endif %}
     {% endfor %}
+
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        // Função para abrir o modal
-        const abrirModal = (targetId) => {
-          const modal = document.querySelector(targetId)
-          if (modal) {
-            modal.style.display = 'block'
-          }
-        }
-      
-        // Função para fechar o modal
-        const fecharModal = (modal) => {
-          modal.style.display = 'none'
-        }
-      
-        // Adiciona evento de clique a todos os links de contagem de episódios
-        document.querySelectorAll('.episode-count-link').forEach((link) => {
-          link.addEventListener('click', (event) => {
-            const targetId = event.currentTarget.getAttribute('data-modal-target')
-            abrirModal(targetId)
-          })
-        })
-      
-        // Adiciona evento de clique a todos os botões de fechar
-        document.querySelectorAll('.close-button').forEach((button) => {
-          button.addEventListener('click', (event) => {
-            const modal = event.currentTarget.closest('.modal')
-            fecharModal(modal)
-          })
-        })
-      
-        // Adiciona evento de clique para fechar ao clicar fora do modal
-        document.querySelectorAll('.modal').forEach((modal) => {
-          modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-              fecharModal(modal)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Função para abrir o modal
+            const abrirModal = (targetId) => {
+                const modal = document.querySelector(targetId)
+                if (modal) {
+                    modal.style.display = 'block'
+                }
             }
-          })
+        
+            // Função para fechar o modal
+            const fecharModal = (modal) => {
+                modal.style.display = 'none'
+            }
+        
+            // Adiciona evento de clique a todos os links de contagem de episódios
+            document.querySelectorAll('.episode-count-link').forEach((link) => {
+                link.addEventListener('click', (event) => {
+                    const targetId = event.currentTarget.getAttribute('data-modal-target')
+                    abrirModal(targetId)
+                })
+            })
+        
+            // Adiciona evento de clique a todos os botões de fechar
+            document.querySelectorAll('.close-button').forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    const modal = event.currentTarget.closest('.modal')
+                    fecharModal(modal)
+                })
+            })
+        
+            // Adiciona evento de clique para fechar ao clicar fora do modal
+            document.querySelectorAll('.modal').forEach((modal) => {
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        fecharModal(modal)
+                    }
+                })
+            })
         })
-      })
     </script>
-  </body>
+
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</body>
 </html>

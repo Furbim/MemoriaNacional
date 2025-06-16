@@ -1,172 +1,264 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ filme.titulo_original }}</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        background-color: #f4f4f4;
-        color: #333;
-        line-height: 1.6;
-      }
-      .container {
-        max-width: 900px;
-        margin: 20px auto;
-        background: #fff;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-      .header {
-        display: flex;
-        gap: 30px;
-      }
-      .poster img {
-        max-width: 250px;
-        height: auto;
-        border-radius: 5px;
-      }
-      .info {
-        flex: 1;
-      }
-      .info h1 {
-        margin-top: 0;
-      }
-      .info p {
-        margin: 5px 0;
-      }
-      .sinopse {
-        margin-top: 20px;
-        text-align: justify;
-      }
-      h3 {
-        border-bottom: 2px solid #eee;
-        padding-bottom: 5px;
-        margin-top: 30px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <div class="poster">
-          {% if filme.poster %}
-            <img src="{{ filme.poster.url }}" alt="Pôster de {{ filme.titulo_original }}" />
-          {% endif %}
-        </div>
-        <div class="info">
-          <h1>{{ filme.titulo_original }}</h1>
-          {% if filme.outros_titulos %}
-            <p>
-              <strong>Outros Títulos:</strong> {{ filme.outros_titulos }}
-            </p>
-          {% endif %}
-          {% if filme.duracao %}
-            <p>
-              <strong>Duração:</strong> {{ filme.duracao }}
-            </p>
-          {% endif %}
-          {% if filme.data_estreia %}
-            <p>
-              <strong>Estreia:</strong> {{ filme.data_estreia|date:'d/m/Y' }} {% if filme.observacao_estreia %}
-                ({{ filme.observacao_estreia }})
-              {% endif %}
-            </p>
-          {% endif %}
-          {% if filme.classificacao_indicativa %}
-            <p>
-              <strong>Classificação:</strong> {{ filme.classificacao_indicativa }}
-            </p>
-          {% endif %}
-        </div>
-      </div>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        dark: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 text-white min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header Section -->
+        <div class="bg-dark-800/50 backdrop-blur-sm rounded-2xl border border-dark-600 overflow-hidden mb-8">
+            <div class="flex flex-col lg:flex-row">
+                <!-- Poster -->
+                <div class="lg:w-1/3 p-6">
+                    <div class="aspect-[2/3] rounded-xl overflow-hidden shadow-2xl">
+                        {% if filme.poster %}
+                            <img src="{{ filme.poster.url }}" 
+                                 alt="Pôster de {{ filme.titulo_original }}"
+                                 class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-dark-700 to-dark-800 flex items-center justify-center">
+                                <i class="fas fa-film text-6xl text-dark-500"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
 
-      {% if filme.sinopse %}
-        <div class="sinopse">
-          <h3>Sinopse</h3>
-          <p>{{ filme.sinopse }}</p>
-        </div>
-      {% endif %}
+                <!-- Info -->
+                <div class="lg:w-2/3 p-6">
+                    <div class="space-y-4">
+                        <h1 class="text-4xl font-bold text-white mb-2">{{ filme.titulo_original }}</h1>
+                        
+                        {% if filme.outros_titulos %}
+                        <div class="flex items-start space-x-3">
+                            <i class="fas fa-tag text-primary-400 mt-1"></i>
+                            <div>
+                                <span class="text-dark-300 text-sm font-medium">Outros Títulos:</span>
+                                <p class="text-white">{{ filme.outros_titulos }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
 
-      <div class="details">
-        <h3>Detalhes</h3>
-        <ul>
-          {% if filme.generos.all %}
-            <li>
-              <strong>Gêneros:</strong> {% for genero in filme.generos.all %}
-                {{ genero.nome }}{% if not forloop.last %}, {% endif %}
-              {% endfor %}
-            </li>
-          {% endif %}
-          {% if filme.paises_origem %}
-            <li>
-              <strong>País de Origem:</strong> {{ filme.paises_origem }}
-            </li>
-          {% endif %}
-          {% if filme.idioma_original %}
-            <li>
-              <strong>Idioma Original:</strong> {{ filme.idioma_original }}
-            </li>
-          {% endif %}
-          {% if filme.producao.all %}
-            <li>
-              <strong>Produção:</strong> {% for empresa in filme.producao.all %}
-                {{ empresa.nome }}{% if not forloop.last %}, {% endif %}
-              {% endfor %}
-            </li>
-          {% endif %}
-          {% if filme.distribuicao.all %}
-            <li>
-              <strong>Distribuição:</strong> {% for empresa in filme.distribuicao.all %}
-                {{ empresa.nome }}{% if not forloop.last %}, {% endif %}
-              {% endfor %}
-            </li>
-          {% endif %}
-          {% if filme.site_oficial %}
-            <li>
-              <strong>Site Oficial:</strong> <a href="{{ filme.site_oficial }}" target="_blank">Acessar</a>
-            </li>
-          {% endif %}
-          {% if filme.link_trailer %}
-            <li>
-              <strong>Trailer:</strong> <a href="{{ filme.link_trailer }}" target="_blank">Assistir</a>
-            </li>
-          {% endif %}
-        </ul>
-      </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {% if filme.duracao %}
+                            <div class="flex items-center space-x-3 bg-dark-700/50 rounded-lg p-3">
+                                <i class="fas fa-clock text-blue-400"></i>
+                                <div>
+                                    <span class="text-dark-300 text-sm">Duração</span>
+                                    <p class="text-white font-medium">{{ filme.duracao }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if filme.data_estreia %}
+                            <div class="flex items-center space-x-3 bg-dark-700/50 rounded-lg p-3">
+                                <i class="fas fa-calendar text-green-400"></i>
+                                <div>
+                                    <span class="text-dark-300 text-sm">Estreia</span>
+                                    <p class="text-white font-medium">
+                                        {{ filme.data_estreia|date:'d/m/Y' }}
+                                        {% if filme.observacao_estreia %}
+                                            <span class="text-dark-400 text-sm">({{ filme.observacao_estreia }})</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            {% if filme.classificacao_indicativa %}
+                            <div class="flex items-center space-x-3 bg-dark-700/50 rounded-lg p-3">
+                                <i class="fas fa-shield-alt text-yellow-400"></i>
+                                <div>
+                                    <span class="text-dark-300 text-sm">Classificação</span>
+                                    <p class="text-white font-medium">{{ filme.classificacao_indicativa }}</p>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Synopsis -->
+        {% if filme.sinopse %}
+        <div class="bg-dark-800/50 backdrop-blur-sm rounded-2xl border border-dark-600 p-6 mb-8">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-1 h-6 bg-gradient-to-b from-primary-400 to-primary-600 rounded-full"></div>
+                <h2 class="text-2xl font-bold text-white">Sinopse</h2>
+            </div>
+            <p class="text-dark-200 leading-relaxed text-justify">{{ filme.sinopse }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Details -->
+        <div class="bg-dark-800/50 backdrop-blur-sm rounded-2xl border border-dark-600 p-6 mb-8">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-1 h-6 bg-gradient-to-b from-blue-400 to-blue-600 rounded-full"></div>
+                <h2 class="text-2xl font-bold text-white">Detalhes</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% if filme.generos.all %}
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+                        <i class="fas fa-tags text-purple-400"></i>
+                        <span>Gêneros</span>
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        {% for genero in filme.generos.all %}
+                        <span class="px-3 py-1 bg-purple-600/20 border border-purple-500/30 rounded-full text-purple-300 text-sm">
+                            {{ genero.nome }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if filme.paises_origem %}
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+                        <i class="fas fa-globe text-green-400"></i>
+                        <span>País de Origem</span>
+                    </h3>
+                    <p class="text-dark-200">{{ filme.paises_origem }}</p>
+                </div>
+                {% endif %}
+
+                {% if filme.idioma_original %}
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+                        <i class="fas fa-language text-blue-400"></i>
+                        <span>Idioma Original</span>
+                    </h3>
+                    <p class="text-dark-200">{{ filme.idioma_original }}</p>
+                </div>
+                {% endif %}
+
+                {% if filme.producao.all %}
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+                        <i class="fas fa-industry text-orange-400"></i>
+                        <span>Produção</span>
+                    </h3>
+                    <p class="text-dark-200">
+                        {% for empresa in filme.producao.all %}
+                            {{ empresa.nome }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+                {% endif %}
+
+                {% if filme.distribuicao.all %}
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+                        <i class="fas fa-truck text-red-400"></i>
+                        <span>Distribuição</span>
+                    </h3>
+                    <p class="text-dark-200">
+                        {% for empresa in filme.distribuicao.all %}
+                            {{ empresa.nome }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Links -->
+            <div class="flex flex-wrap gap-4 mt-6">
+                {% if filme.site_oficial %}
+                <a href="{{ filme.site_oficial }}" target="_blank" 
+                   class="flex items-center space-x-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Site Oficial</span>
+                </a>
+                {% endif %}
+                {% if filme.link_trailer %}
+                <a href="{{ filme.link_trailer }}" target="_blank" 
+                   class="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
+                    <i class="fas fa-play"></i>
+                    <span>Trailer</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Cast -->
+        <div class="bg-dark-800/50 backdrop-blur-sm rounded-2xl border border-dark-600 p-6">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-1 h-6 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-full"></div>
+                <h2 class="text-2xl font-bold text-white">Elenco e Equipe Técnica</h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-dark-600">
+                            <th class="text-left py-3 px-4 text-white font-semibold">Artista</th>
+                            <th class="text-left py-3 px-4 text-white font-semibold">Função</th>
+                            <th class="text-left py-3 px-4 text-white font-semibold">Personagem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for membro in filme.elencofilme_set.all %}
+                        <tr class="border-b border-dark-700/50 hover:bg-dark-700/30 transition-colors">
+                            <td class="py-3 px-4">
+                                <a href="{% url 'core:artista_detalhe' membro.artista.id %}" 
+                                   class="text-primary-400 hover:text-primary-300 font-medium transition-colors">
+                                    {{ membro.artista.nome_principal }}
+                                </a>
+                            </td>
+                            <td class="py-3 px-4 text-dark-200">{{ membro.funcao.nome }}</td>
+                            <td class="py-3 px-4 text-dark-200">
+                                {% if membro.personagem %}
+                                    {{ membro.personagem }}
+                                {% else %}
+                                    <span class="text-dark-500">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="cast">
-      <h3>Elenco e Equipe Técnica</h3>
-      <table style="width: 100%; border-collapse: collapse;">
-        <thead style="text-align: left; border-bottom: 1px solid #ccc;">
-          <tr>
-            <th style="padding: 8px;">Artista</th>
-            <th style="padding: 8px;">Função</th>
-            <th style="padding: 8px;">Personagem</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for membro in filme.elencofilme_set.all %}
-            <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 8px;">
-                    <a href="{% url 'core:artista_detalhe' membro.artista.id %}">
-                        {{ membro.artista.nome_principal }}
-                    </a>
-                </td>
-                <td style="padding: 8px;">{{ membro.funcao.nome }}</td>
-                <td style="padding: 8px;">
-                    {% if membro.personagem %}
-                        {{ membro.personagem }}
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </body>
+</body>
 </html>
