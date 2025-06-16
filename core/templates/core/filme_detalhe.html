@@ -40,6 +40,51 @@
         }
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* The Close Button */
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body class="bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 text-white min-h-screen">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -211,11 +256,11 @@
                 </a>
                 {% endif %}
                 {% if filme.link_trailer %}
-                <a href="{{ filme.link_trailer }}" target="_blank" 
-                   class="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
+                <button onclick="openTrailerModal()" 
+                        class="flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors">
                     <i class="fas fa-play"></i>
                     <span>Trailer</span>
-                </a>
+                </button>
                 {% endif %}
             </div>
         </div>
@@ -260,5 +305,62 @@
             </div>
         </div>
     </div>
+
+    <!-- Trailer Modal -->
+    {% if filme.link_trailer %}
+    <div id="trailerModal" class="modal">
+        <div class="modal-content" style="max-width: 800px; padding: 0; background: #1e293b; border-radius: 1rem; overflow: hidden;">
+            <div class="flex justify-between items-center p-4 border-b border-slate-600">
+                <h3 class="text-xl font-bold text-white">Trailer - {{ filme.titulo_original }}</h3>
+                <span class="close-button" onclick="closeTrailerModal()">&times;</span>
+            </div>
+            <div class="aspect-video">
+                <iframe id="trailerIframe"
+                        width="100%"
+                        height="100%"
+                        src="/placeholder.svg"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+    function openTrailerModal() {
+        const modal = document.getElementById('trailerModal');
+        const iframe = document.getElementById('trailerIframe');
+        const trailerUrl = '{{ embed_link }}';
+        
+        // Define a URL do iframe
+        iframe.src = trailerUrl;
+        modal.classList.add('show');
+    }
+
+    function closeTrailerModal() {
+        const modal = document.getElementById('trailerModal');
+        const iframe = document.getElementById('trailerIframe');
+        
+        // Remove a URL do iframe para parar o vídeo
+        iframe.src = '';
+        modal.classList.remove('show');
+    }
+
+    // Fechar modal ao clicar fora dele
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('trailerModal');
+        if (modal) {
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeTrailerModal();
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>

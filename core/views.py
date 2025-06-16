@@ -47,8 +47,12 @@ def filme_detalhe_view(request, filme_id):
     filme.visualizacoes += 1 # Adiciona 1 ao valor atual
     filme.save() # Salva o objeto com o novo valor no banco de dados
     # --- FIM DA LÓGICA ---
+    embed_link = None
+    if filme.link_trailer:
+        embed_link = filme.link_trailer.replace('watch?v=', 'embed/')
 
-    context = { 'filme': filme }
+    context = { 'filme': filme,
+    'embed_link': embed_link,}
     return render(request, 'core/filme_detalhe.html', context)
 
 
