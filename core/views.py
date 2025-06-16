@@ -21,6 +21,8 @@ def home_view(request):
     # --- LÓGICA DOS MAIS ACESSADOS ---
     filmes_mais_acessados = Filme.objects.order_by('-visualizacoes')[:5]
     series_mais_acessadas = Serie.objects.order_by('-visualizacoes')[:5]
+    contagem_filmes = Filme.objects.count()
+    contagem_series = Serie.objects.count()
 
     # --- CONTEXTO COMPLETO ---
     context = {
@@ -29,6 +31,8 @@ def home_view(request):
         'aniversariantes': aniversariantes_do_dia,
         'filmes_populares': filmes_mais_acessados,
         'series_populares': series_mais_acessadas,
+        'contagem_filmes': contagem_filmes,
+        'contagem_series': contagem_series,
     }
     
     return render(request, 'core/home.html', context)

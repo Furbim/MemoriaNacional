@@ -1,21 +1,86 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
+
+    <div style="background-color: #e7f3fe; border: 1px solid #d0eaff; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+        <h4 style="margin-top: 0; color: #0c5460;">Nosso Catálogo em Números</h4>
+        <p style="margin: 5px 0;">Total de Filmes Cadastrados: <strong>{{ contagem_filmes }}</strong></p>
+        <p style="margin: 5px 0;">Total de Séries Cadastradas: <strong>{{ contagem_series }}</strong></p>
+    </div>
     <h1>Meu Site de Filmes e Séries</h1>
 
     {% if filmes_populares or series_populares %}
     <section>
         <h2>Em Destaque</h2>
-        </section>
+        <div class="grid-container">
+            {% for filme in filmes_populares %}
+            <a href="{% url 'core:filme_detalhe' filme.id %}" style="text-decoration: none; color: inherit;">
+                <div class="grid-item">
+                    <div>{% if filme.poster %}<img src="{{ filme.poster.url }}" alt="Pôster de {{ filme.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}</div>
+                    <div>
+                        <p>{{ filme.titulo_original }}</p>
+                        <small>{{ filme.visualizacoes }} visualizações</small>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+            {% for serie in series_populares %}
+             <a href="{% url 'core:serie_detalhe' serie.id %}" style="text-decoration: none; color: inherit;">
+                <div class="grid-item">
+                     <div>{% if serie.poster %}<img src="{{ serie.poster.url }}" alt="Pôster de {{ serie.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}</div>
+                    <div>
+                        <p>{{ serie.titulo_original }}</p>
+                        <small>{{ serie.visualizacoes }} visualizações</small>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
     {% endif %}
 
     <section>
         <h2>Adicionados Recentemente</h2>
-        </section>
+        <div class="grid-container">
+            {% for filme in filmes %}
+            <a href="{% url 'core:filme_detalhe' filme.id %}" style="text-decoration: none; color: inherit;">
+                <div class="grid-item">
+                    <div>{% if filme.poster %}<img src="{{ filme.poster.url }}" alt="Pôster de {{ filme.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}</div>
+                    <p>{{ filme.titulo_original }}</p>
+                </div>
+            </a>
+            {% endfor %}
+            {% for serie in series %}
+            <a href="{% url 'core:serie_detalhe' serie.id %}" style="text-decoration: none; color: inherit;">
+                <div class="grid-item">
+                    <div>{% if serie.poster %}<img src="{{ serie.poster.url }}" alt="Pôster de {{ serie.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}</div>
+                    <p>{{ serie.titulo_original }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
 
     {% if aniversariantes %}
     <section>
         <h2>Aniversariantes do Dia</h2>
-        </section>
+        <div class="grid-container">
+            {% for artista in aniversariantes %}
+            <a href="{% url 'core:artista_detalhe' artista.id %}" style="text-decoration: none; color: inherit;">
+                <div class="grid-item">
+                    <div class="artist-photo-container">
+                        {% if artista.foto %}
+                            <img src="{{ artista.foto.url }}" alt="Foto de {{ artista.nome_principal }}">
+                        {% else %}
+                            <div class="artist-photo-placeholder">Sem Foto</div>
+                        {% endif %}
+                    </div>
+                    <p>{{ artista.nome_principal }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
     {% endif %}
+
 {% endblock %}
