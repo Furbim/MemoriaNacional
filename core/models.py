@@ -96,6 +96,7 @@ class Serie(models.Model):
     link_trailer = models.URLField(blank=True, null=True, verbose_name="Trailer (Player de Vídeo)")
     poster = models.ImageField(upload_to='posters/series/', blank=True, null=True)
     visualizacoes = models.IntegerField(default=0, verbose_name="Visualizações")
+    link_assistir = models.URLField(blank=True, null=True, verbose_name="Link para Assistir")
     # Relações
     generos = models.ManyToManyField(Genero, blank=True)
     producao = models.ManyToManyField(Empresa, related_name="series_produzidas", blank=True, verbose_name="Produção (Empresas)")

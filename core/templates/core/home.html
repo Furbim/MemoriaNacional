@@ -1,119 +1,21 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Site de Filmes</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        h1, h2 { text-align: center; color: #111; }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .grid-item {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
-            padding: 10px;
-        }
-        .grid-item img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
-        .grid-item p {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        /* Estilo para placeholder de imagem */
-        .img-placeholder {
-            width: 100%;
-            height: 270px; /* Altura aproximada de um pôster */
-            background-color: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            color: #aaa;
-        }
-    </style>
-</head>
-<body>
+{% extends 'core/base.html' %}
 
-    <div class="container">
-        <h1>Meu Site de Filmes e Séries</h1>
+{% block content %}
+    <h1>Meu Site de Filmes e Séries</h1>
 
-        <section>
-            <h2>Em Destaque</h2>
-            <div class="grid-container">
-                {% for filme in filmes_populares %}
-                <a href="{% url 'core:filme_detalhe' filme.id %}" style="text-decoration: none; color: inherit;">
-                    <div class="grid-item">
-                        {% if filme.poster %}<img src="{{ filme.poster.url }}" alt="Pôster de {{ filme.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}
-                        <p>{{ filme.titulo_original }}</p>
-                        <small>{{ filme.visualizacoes }} visualizações</small>
-                    </div>
-                </a>
-                {% endfor %}
-                {% for serie in series_populares %}
-                 <a href="{% url 'core:serie_detalhe' serie.id %}" style="text-decoration: none; color: inherit;">
-                    <div class="grid-item">
-                        {% if serie.poster %}<img src="{{ serie.poster.url }}" alt="Pôster de {{ serie.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}
-                        <p>{{ serie.titulo_original }}</p>
-                        <small>{{ serie.visualizacoes }} visualizações</small>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
+    {% if filmes_populares or series_populares %}
+    <section>
+        <h2>Em Destaque</h2>
+        </section>
+    {% endif %}
+
+    <section>
+        <h2>Adicionados Recentemente</h2>
         </section>
 
-        <section>
-            <h2>Adicionados Recentemente</h2>
-            <div class="grid-container">
-                {% for filme in filmes %}
-                <a href="{% url 'core:filme_detalhe' filme.id %}" style="text-decoration: none; color: inherit;">
-                    <div class="grid-item">
-                        {% if filme.poster %}<img src="{{ filme.poster.url }}" alt="Pôster de {{ filme.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}
-                        <p>{{ filme.titulo_original }}</p>
-                    </div>
-                </a>
-                {% endfor %}
-                {% for serie in series %}
-                <a href="{% url 'core:serie_detalhe' serie.id %}" style="text-decoration: none; color: inherit;">
-                    <div class="grid-item">
-                        {% if serie.poster %}<img src="{{ serie.poster.url }}" alt="Pôster de {{ serie.titulo_original }}">{% else %}<div class="img-placeholder">Sem Pôster</div>{% endif %}
-                        <p>{{ serie.titulo_original }}</p>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
+    {% if aniversariantes %}
+    <section>
+        <h2>Aniversariantes do Dia</h2>
         </section>
-
-        {% if aniversariantes %}
-        <section>
-            <h2>Aniversariantes do Dia</h2>
-            <div class="grid-container">
-                {% for artista in aniversariantes %}
-                <a href="{% url 'core:artista_detalhe' artista.id %}" style="text-decoration: none; color: inherit;">
-                    <div class="grid-item">
-                        {% if artista.foto %}
-                            <img src="{{ artista.foto.url }}" alt="Foto de {{ artista.nome_principal }}">
-                        {% else %}
-                            <div class="img-placeholder">Sem Foto</div>
-                        {% endif %}
-                        <p>{{ artista.nome_principal }}</p>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-        </section>
-        {% endif %}
-        </div>
-
-</body>
-</html>
+    {% endif %}
+{% endblock %}
