@@ -1,5 +1,7 @@
-# Dentro de requirements.txt
-
 Django==5.0.6
 Pillow==10.3.0
 django-jazzmin==5.1.0
+gunicorn
+whitenoise
+dj-database-url
+psycopg2-binary
