@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-dovovv21+r39svf+5(-y1y-i%#dwnm6x(05_(dn^y$2c(sa+$r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['memorianacional-production.up.railway.app']
 
 
 # Application definition
